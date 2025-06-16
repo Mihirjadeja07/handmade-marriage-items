@@ -2,9 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Element Selectors ---
     const loginForm = document.getElementById('login-form');
     const logoutButton = document.getElementById('logout-button');
-    const addProductForm = document.getElementById('add-product-form');
+    const productForm = document.getElementById('product-form');
     const adminProductContainer = document.getElementById('admin-product-container');
     const adminOrdersContainer = document.getElementById('admin-orders-container');
+    const formTitle = document.getElementById('form-title');
+    const submitButton = document.getElementById('form-submit-button');
+    const cancelButton = document.getElementById('form-cancel-button');
+    const productIdField = document.getElementById('product-id');
 
     // ============= લોગિન અને સુરક્ષા =============
     if (loginForm) {
@@ -15,11 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', handleLogout);
     }
 
+    // તપાસો કે યુઝર ડેશબોર્ડ પેજ પર છે કે નહીં
     const onDashboardPage = window.location.pathname.includes('dashboard.html');
     if (onDashboardPage) {
+        // જો યુઝર લોગિન થયેલો ન હોય તો તેને લોગિન પેજ પર પાછો મોકલો
         if (sessionStorage.getItem('isAdminLoggedIn') !== 'true') {
             window.location.href = '/admin/login.html';
         } else {
+            // જો લોગિન થયેલો હોય તો પ્રોડક્ટ્સ અને ઓર્ડર્સ બતાવો
             fetchAndDisplayProducts();
             fetchAndDisplayOrders();
         }
@@ -72,37 +79,73 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>${product.name}</h4>
                     <p>₹${product.price.value} / ${product.price.unit}</p>
                 </div>
-                <button class="delete-button" data-id="${product.id}">ડિલીટ</button>
+                <div class="admin-buttons">
+                    <button class="edit-button" data-id="${product._id}">એડિટ</button>
+                    <button class="delete-button" data-id="${product._id}">ડિલીટ</button>
+                </div>
             `;
             adminProductContainer.appendChild(productDiv);
         });
         
+        addEditEventListeners(products);
         addDeleteEventListeners();
     }
     
-    if (addProductForm) {
-        addProductForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const newProduct = {
-                name: document.getElementById('product-name').value,
-                price: document.getElementById('product-price').value,
-                unit: document.getElementById('product-unit').value,
-                image_url: document.getElementById('product-image').value
-            };
-            
-            const response = await fetch('/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProduct)
+    if (productForm) {
+        productForm.addEventListener('submit', handleFormSubmit);
+    }
+    
+    if(cancelButton) {
+        cancelButton.addEventListener('click', resetForm);
+    }
+
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        const productId = productIdField.value;
+        const productData = {
+            name: document.getElementById('product-name').value,
+            price: document.getElementById('product-price').value,
+            unit: document.getElementById('product-unit').value,
+            image_url: document.getElementById('product-image').value
+        };
+
+        const method = productId ? 'PUT' : 'POST';
+        const url = productId ? `/api/products/${productId}` : '/api/products';
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData)
+        });
+        
+        if (response.ok) {
+            alert(productId ? 'પ્રોડક્ટ સફળતાપૂર્વક અપડેટ થઈ ગઈ છે!' : 'પ્રોડક્ટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!');
+            resetForm();
+            fetchAndDisplayProducts();
+        } else {
+            alert('કંઈક ભૂલ થઈ. કૃપા કરીને ફરી પ્રયત્ન કરો.');
+        }
+    }
+
+    function addEditEventListeners(products) {
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const productId = e.target.getAttribute('data-id');
+                const productToEdit = products.find(p => p._id === productId);
+                
+                if (productToEdit) {
+                    formTitle.textContent = 'પ્રોડક્ટ એડિટ કરો';
+                    productIdField.value = productToEdit._id;
+                    document.getElementById('product-name').value = productToEdit.name;
+                    document.getElementById('product-price').value = productToEdit.price.value;
+                    document.getElementById('product-unit').value = productToEdit.price.unit;
+                    document.getElementById('product-image').value = productToEdit.image_url;
+                    submitButton.textContent = 'અપડેટ કરો';
+                    cancelButton.style.display = 'inline-block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             });
-            
-            if (response.ok) {
-                alert('પ્રોડક્ટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!');
-                addProductForm.reset();
-                fetchAndDisplayProducts();
-            } else {
-                alert('પ્રોડક્ટ ઉમેરવામાં નિષ્ફળતા મળી.');
-            }
         });
     }
 
@@ -123,6 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+    }
+
+    function resetForm() {
+        formTitle.textContent = 'નવી પ્રોડક્ટ ઉમેરો';
+        productForm.reset();
+        productIdField.value = '';
+        submitButton.textContent = 'પ્રોડક્ટ ઉમેરો';
+        cancelButton.style.display = 'none';
     }
 
     // --- ઓર્ડર મેનેજમેન્ટ ---
