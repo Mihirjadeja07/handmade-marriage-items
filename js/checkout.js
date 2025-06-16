@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkoutForm = document.getElementById('checkout-form');
     const pincodeError = document.getElementById('pincode-error');
 
+    // જુનાગઢ જિલ્લાના માન્ય પિનકોડની યાદી
     const junagadhPincodes = [
         "362001", "362002", "362011", "362015", "362020", "362030", "362037",
         "362110", "362120", "362130", "362135", "362140", "362150",
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const customerPincode = document.getElementById('customer-pincode').value;
 
+            // પિનકોડ તપાસો
             if (!junagadhPincodes.includes(customerPincode)) {
                 pincodeError.textContent = 'માફ કરશો, આ પિનકોડ પર ડિલિવરી ઉપલબ્ધ નથી.';
                 return;
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             pincodeError.textContent = '';
             
+            // ગ્રાહકની વિગતો મેળવો
             const customerDetails = {
                 name: document.getElementById('customer-name').value,
                 address: document.getElementById('customer-address').value,
@@ -31,11 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 pincode: customerPincode
             };
 
+            // કાર્ટમાંથી વસ્તુઓ અને ટોટલ મેળવો
             const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cartItems.length === 0) {
+                alert("તમારું કાર્ટ ખાલી છે!");
+                return;
+            }
+            
             const total = cartItems.reduce((sum, item) => sum + item.price.value, 0);
 
+            // ઓર્ડરનો ડેટા તૈયાર કરો
             const orderData = { customer: customerDetails, items: cartItems, total: total };
 
+            // ઓર્ડરને સર્વર પર મોકલો
             try {
                 const response = await fetch('/api/orders', {
                     method: 'POST',
@@ -44,8 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    localStorage.removeItem('cart');
-                    window.location.href = '/order-success.html';
+                    const result = await response.json();
+                    localStorage.removeItem('cart'); // કાર્ટ ખાલી કરો
+                    sessionStorage.setItem('lastOrderId', result.orderId); // ઓર્ડર ID સેવ કરો
+                    window.location.href = '/order-success.html'; // સફળતા પેજ પર મોકલો
                 } else {
                     alert('ઓર્ડર કરવામાં સમસ્યા આવી. કૃપા કરીને ફરી પ્રયત્ન કરો.');
                 }
