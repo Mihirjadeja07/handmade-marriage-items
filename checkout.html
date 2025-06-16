@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ચેકઆઉટ - Gir Fresh</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="/admin/login.html" class="admin-link">એડમિન લોગિન</a>
+        <div class="container">
+            <h1 class="brand-name">Gir Fresh</h1>
+            <nav>
+                <a href="/">હોમ</a>
+                <a href="/products.html">પ્રોડક્ટ્સ</a>
+                <a href="/cart.html">કાર્ટ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-title-section">
+            <div class="container">
+                <h2>ડિલિવરીની વિગતો</h2>
+                <p>ડિલિવરી ફક્ત જુનાગઢ જિલ્લામાં જ ઉપલબ્ધ છે.</p>
+            </div>
+        </section>
+
+        <section class="checkout-section container">
+            <form id="checkout-form" class="contact-form">
+                <h3>તમારી માહિતી ભરો</h3>
+                <label for="customer-name">પૂરું નામ:</label>
+                <input type="text" id="customer-name" required>
+                
+                <label for="customer-address">પૂરું સરનામું:</label>
+                <textarea id="customer-address" rows="3" required></textarea>
+                
+                <label for="customer-phone">મોબાઇલ નંબર:</label>
+                <input type="tel" id="customer-phone" required>
+                
+                <label for="customer-pincode">પિનકોડ:</label>
+                <input type="text" id="customer-pincode" required>
+                <p id="pincode-error" class="error-message"></p>
+                
+                <button type="submit" class="submit-button">ઓર્ડર પાક્કો કરો (COD)</button>
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Gir Fresh. સર્વહક સ્વાધીન.</p>
+    </footer>
+
+    <script src="js/checkout.js"></script>
+</body>
+</html>

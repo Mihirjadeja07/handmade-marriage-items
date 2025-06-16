@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>તમારું શોપિંગ કાર્ટ - Gir Fresh</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="/admin/login.html" class="admin-link">એડમિન લોગિન</a>
+        <div class="container">
+            <h1 class="brand-name">Gir Fresh</h1>
+            <nav>
+                <a href="/">હોમ</a>
+                <a href="/products.html">પ્રોડક્ટ્સ</a>
+                <a href="/about.html">અમારા વિશે</a>
+                <a href="/contact.html">સંપર્ક</a>
+                <a href="/cart.html" class="cart-link nav-active">
+                    🛒 કાર્ટ
+                    <span id="cart-counter">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-title-section">
+            <div class="container">
+                <h2>તમારું શોપિંગ કાર્ટ</h2>
+            </div>
+        </section>
+
+        <section class="cart-section container">
+            <div id="cart-items-container">
+                <!-- કાર્ટની વસ્તુઓ JavaScript થી અહીં આવશે -->
+            </div>
+            <div id="cart-summary">
+                <h3>કુલ રકમ: <span id="total-price">₹0</span></h3>
+                <button id="checkout-button" class="submit-button">આગળ વધો (ચેકઆઉટ)</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Gir Fresh. સર્વહક સ્વાધીન.</p>
+    </footer>
+
+    <script src="js/cart.js"></script>
+</body>
+</html>

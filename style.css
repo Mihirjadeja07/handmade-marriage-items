@@ -1,0 +1,416 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;700&family=Teko:wght@400;700&display=swap');
+
+/* Color Palette */
+:root {
+    --deep-green: #2A4D3E;
+    --earthy-brown: #8B4513;
+    --action-orange: #E76F51;
+    --light-bg: #fcfbf8;
+    --text-color: #333;
+    --error-red: #d93025;
+}
+
+/* Basic Reset and Body Styles */
+body {
+    font-family: 'Hind Vadodara', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    line-height: 1.7;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+header {
+    background-color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-bottom: 3px solid var(--deep-green);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-link {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f0f0f0;
+    color: var(--deep-green);
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    z-index: 101;
+}
+.admin-link:hover {
+    background-color: #e0e0e0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-name {
+    font-family: 'Teko', sans-serif;
+    font-size: 2.8rem;
+    color: var(--deep-green);
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: var(--deep-green);
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 8px 10px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+    border-radius: 5px;
+}
+nav a:hover, .nav-active {
+    background-color: #f0f5f0;
+    border-bottom: 2px solid var(--action-orange);
+}
+
+.cart-link {
+    background-color: var(--deep-green);
+    color: white !important;
+    border-radius: 8px;
+    padding: 8px 15px;
+}
+
+.cart-link:hover {
+    background-color: var(--action-orange);
+    border-bottom: 2px solid var(--action-orange);
+}
+
+#cart-counter {
+    background-color: var(--action-orange);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    vertical-align: top;
+    margin-left: 5px;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 60vh;
+    background-image: url('/images/gir-fresh-mustard-fields.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.hero-text {
+    position: relative;
+    z-index: 1;
+}
+.hero-text h2 {
+    font-family: 'Teko', sans-serif;
+    font-size: 3.5rem;
+    margin: 0;
+    letter-spacing: 1px;
+}
+.hero-text p {
+    font-size: 1.4rem;
+}
+
+/* Page Title Section */
+.page-title-section {
+    background-color: #eaf0e6;
+    padding: 40px 0;
+    text-align: center;
+}
+.page-title-section h2 {
+    font-family: 'Teko', sans-serif;
+    font-size: 3rem;
+    color: var(--deep-green);
+    margin: 0;
+}
+
+/* Farmer Story & About Page Section */
+.farmer-story-section, .about-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 60px 0;
+}
+.story-image img, .about-image img {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 10px;
+}
+.story-text h2, .about-text h3 {
+    font-family: 'Teko', sans-serif;
+    font-size: 2.5rem;
+    color: var(--earthy-brown);
+}
+.about-text h3 { margin-top: 20px; }
+
+/* Products Section */
+.products-section {
+    padding: 60px 0;
+}
+.products-section h2 {
+    text-align: center;
+    font-family: 'Teko', sans-serif;
+    font-size: 3rem;
+    color: var(--deep-green);
+    margin-bottom: 40px;
+}
+.product-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+.product-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+.product-card h3 {
+    font-family: 'Teko', sans-serif;
+    font-size: 1.8rem;
+    margin: 15px 20px 5px;
+    flex-grow: 1;
+}
+.product-card .price {
+    font-size: 1.3rem;
+    color: var(--action-orange);
+    font-weight: 700;
+    margin: 0 20px 15px;
+}
+.order-button, .delete-button, .submit-button {
+    background-color: var(--deep-green);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-family: 'Hind Vadodara', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    border-radius: 5px;
+}
+.order-button {
+    border-radius: 0 0 10px 10px;
+}
+.order-button:hover {
+    background-color: var(--action-orange);
+}
+.delete-button {
+    background-color: var(--earthy-brown);
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    margin-left: auto;
+    width: auto;
+}
+.delete-button:hover {
+    background-color: var(--error-red);
+}
+
+/* Contact & Admin Login Page Section */
+.contact-section {
+    display: flex;
+    gap: 40px;
+    padding: 60px 0;
+}
+.login-container {
+    max-width: 450px;
+    margin: 60px auto;
+    padding: 40px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.contact-details { flex: 1; }
+.contact-form { flex: 1.5; }
+
+.contact-details h3, .contact-form h3, .login-container h2 {
+    font-family: 'Teko', sans-serif;
+    font-size: 2.2rem;
+    color: var(--deep-green);
+    text-align: center;
+}
+.contact-details a {
+    color: var(--action-orange);
+    text-decoration: none;
+}
+.contact-form label, .login-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+.contact-form input, .contact-form textarea, .login-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Hind Vadodara', sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box; 
+}
+.submit-button {
+    background-color: var(--action-orange);
+    border-radius: 5px;
+}
+.submit-button:hover {
+    background-color: var(--deep-green);
+}
+
+/* Cart & Checkout Page Styles */
+.cart-section, .checkout-section {
+    max-width: 800px;
+    margin: 40px auto;
+}
+.cart-item, .order-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+.cart-item-details {
+    flex-grow: 1;
+}
+.cart-item-details h4 {
+    margin: 0 0 10px 0;
+    font-family: 'Teko', sans-serif;
+    font-size: 1.5rem;
+}
+#cart-summary {
+    text-align: right;
+    margin-top: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+.error-message {
+    color: var(--error-red);
+    font-size: 0.9rem;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+/* Admin Order Card Styles */
+.order-card {
+    flex-direction: column;
+    align-items: flex-start;
+    border-left: 5px solid var(--deep-green);
+}
+.order-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+.order-header h4 {
+    margin: 0;
+    font-family: 'Teko', sans-serif;
+    color: var(--deep-green);
+    font-size: 1.6rem;
+}
+.order-header span {
+    font-size: 0.9rem;
+    color: #666;
+}
+.order-body { width: 100%; }
+.order-body p { margin: 5px 0; }
+.order-body ul { list-style-type: disc; padding-left: 20px; }
+.order-footer {
+    width: 100%;
+    text-align: right;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: var(--action-orange);
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--deep-green);
+    color: white;
+    margin-top: 40px;
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 850px) {
+    header .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .farmer-story-section, .about-content, .contact-section {
+        flex-direction: column;
+    }
+}

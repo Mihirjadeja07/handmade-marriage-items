@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gir Fresh - ગીરની શુદ્ધતા, સીધી તમારા ઘરે</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Gir Fresh</h1>
+        <nav>
+            <a href="#">હોમ</a>
+            <a href="#">પ્રોડક્ટ્સ</a>
+            <a href="#">સંપર્ક</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>ગીરની શુદ્ધતા, સીધી તમારા ઘરે.</h2>
+            <p>ઓર્ગેનિક અને તાજા શાકભાજી, અનાજ અને ડેરી પ્રોડક્ટ્સ સીધા ખેતરમાંથી.</p>
+        </section>
+
+        <section class="products">
+            <h2>આપણી મુખ્ય પ્રોડક્ટ્સ</h2>
+            <div class="product-container">
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/300x200.png?text=Organic+Wheat" alt="ઓર્ગેનિક ઘઉં">
+                    <h3>ઓર્ગેનિક ઘઉં (Organic Wheat)</h3>
+                    <p class="price">કિંમત: ₹60 / કિલો</p>
+                    <button class="order-button">ઓર્ડર કરો (COD)</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/300x200.png?text=Cow+Ghee" alt="ગાયનું શુદ્ધ ઘી">
+                    <h3>ગાયનું શુદ્ધ ઘી (Cow Ghee)</h3>
+                    <p class="price">કિંમત: ₹2700 / લિટર</p>
+                    <button class="order-button">ઓર્ડર કરો (COD)</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/300x200.png?text=Fresh+Tomatoes" alt="તાજા ટમેટા">
+                    <h3>તાજા ટમેટા (Fresh Tomatoes)</h3>
+                    <p class="price">કિંમત: ₹80 / કિલો</p>
+                    <button class="order-button">ઓર્ડર કરો (COD)</button>
+                </div>
+                 <div class="product-card">
+                    <img src="https://via.placeholder.com/300x200.png?text=Cow+Milk" alt="ગાયનું દૂધ">
+                    <h3>ગાયનું દૂધ (Cow Milk)</h3>
+                    <p class="price">કિંમત: ₹50 / 500 મિલી</p>
+                    <button class="order-button">ઓર્ડર કરો (COD)</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Gir Fresh. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

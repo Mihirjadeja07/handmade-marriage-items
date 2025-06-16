@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>એડમિન ડેશબોર્ડ - Gir Fresh</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="brand-name">Gir Fresh - એડમિન પેનલ</h1>
+            <nav>
+                <button id="logout-button" class="submit-button" style="background-color: var(--earthy-brown); width: auto;">લોગઆઉટ</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top:40px;">
+        
+        <section class="admin-form-section">
+            <h2>નવી પ્રોડક્ટ ઉમેરો</h2>
+            <form id="add-product-form" class="contact-form">
+                <label for="product-name">પ્રોડક્ટનું નામ:</label>
+                <input type="text" id="product-name" required>
+
+                <label for="product-price">કિંમત (ફક્ત આંકડો):</label>
+                <input type="number" id="product-price" required>
+                
+                <label for="product-unit">એકમ (દા.ત., કિલો, 500 ગ્રામ):</label>
+                <input type="text" id="product-unit" required>
+
+                <label for="product-image">ઇમેજનો પાથ (દા.ત., images/new.jpg):</label>
+                <input type="text" id="product-image" required>
+                
+                <button type="submit" class="submit-button">પ્રોડક્ટ ઉમેરો</button>
+            </form>
+        </section>
+
+        <hr style="margin: 60px 0;">
+
+        <section class="admin-products-list">
+            <h2>હાલની પ્રોડક્ટ્સ</h2>
+            <div id="admin-product-container"></div>
+        </section>
+        
+        <hr style="margin: 60px 0;">
+
+        <section class="admin-orders-list">
+            <h2>મળેલા ઓર્ડર્સ</h2>
+            <div id="admin-orders-container">
+                <!-- JavaScript અહીં ઓર્ડર્સની યાદી બનાવશે -->
+            </div>
+        </section>
+
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>
