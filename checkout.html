@@ -1,58 +1,66 @@
-<!DOCTYPE html>
-<html lang="gu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ચેકઆઉટ - Gir Fresh</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header>
-        <a href="/admin/login.html" class="admin-link">એડમિન લોગિન</a>
-        <div class="container">
-            <h1 class="brand-name">Gir Fresh</h1>
-            <nav>
-                <a href="/">હોમ</a>
-                <a href="/products.html">પ્રોડક્ટ્સ</a>
-                <a href="/cart.html">કાર્ટ</a>
-            </nav>
-        </div>
-    </header>
+document.addEventListener('DOMContentLoaded', () => {
+    const checkoutForm = document.getElementById('checkout-form');
+    const pincodeError = document.getElementById('pincode-error');
 
-    <main>
-        <section class="page-title-section">
-            <div class="container">
-                <h2>ડિલિવરીની વિગતો</h2>
-                <p>ડિલિવરી ફક્ત જુનાગઢ જિલ્લામાં જ ઉપલબ્ધ છે.</p>
-            </div>
-        </section>
+    // જુનાગઢ જિલ્લાના માન્ય પિનકોડની યાદી
+    const junagadhPincodes = [
+        "362001", "362002", "362011", "362015", "362020", "362030", "362037",
+        "362110", "362120", "362130", "362135", "362140", "362150",
+        "362220", "362222", "362225", "362229", "362240", "362245", "362250", 
+        "362255", "362260", "362263", "362268", "362310", "362610", "362620", 
+        "362625", "362630", "362640", "362715", "362720", "362725", 
+        "365440", "362560", "362565", "362510", "360490"
+    ];
 
-        <section class="checkout-section container">
-            <form id="checkout-form" class="contact-form">
-                <h3>તમારી માહિતી ભરો</h3>
-                <label for="customer-name">પૂરું નામ:</label>
-                <input type="text" id="customer-name" required>
-                
-                <label for="customer-address">પૂરું સરનામું:</label>
-                <textarea id="customer-address" rows="3" required></textarea>
-                
-                <label for="customer-phone">મોબાઇલ નંબર:</label>
-                <input type="tel" id="customer-phone" required>
-                
-                <label for="customer-pincode">પિનકોડ:</label>
-                <input type="text" id="customer-pincode" required>
-                <p id="pincode-error" class="error-message"></p>
-                
-                <button type="submit" class="submit-button">ઓર્ડર પાક્કો કરો (COD)</button>
-            </form>
-        </section>
-    </main>
-    
-    <footer>
-        <p>&copy; 2025 Gir Fresh. સર્વહક સ્વાધીન.</p>
-    </footer>
+    if(checkoutForm) {
+        checkoutForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const customerPincode = document.getElementById('customer-pincode').value;
 
-    <script src="js/checkout.js"></script>
-</body>
-</html>
+            if (!junagadhPincodes.includes(customerPincode)) {
+                pincodeError.textContent = 'માફ કરશો, આ પિનકોડ પર ડિલિવરી ઉપલબ્ધ નથી.';
+                return;
+            }
+            
+            pincodeError.textContent = '';
+            
+            const customerDetails = {
+                name: document.getElementById('customer-name').value,
+                address: document.getElementById('customer-address').value,
+                phone: document.getElementById('customer-phone').value,
+                pincode: customerPincode
+            };
+
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cartItems.length === 0) {
+                alert("તમારું કાર્ટ ખાલી છે!");
+                return;
+            }
+            
+            const total = cartItems.reduce((sum, item) => sum + item.price.value, 0);
+
+            const orderData = { customer: customerDetails, items: cartItems, total: total };
+
+            try {
+                const response = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    localStorage.removeItem('cart');
+                    sessionStorage.setItem('lastOrderId', result.orderId);
+                    window.location.href = '/order-success.html';
+                } else {
+                    alert('ઓર્ડર કરવામાં સમસ્યા આવી. કૃપા કરીને ફરી પ્રયત્ન કરો.');
+                }
+            } catch (error) {
+                console.error('Order submission error:', error);
+                alert('સર્વર સાથે કનેક્ટ થઈ શક્યું નથી.');
+            }
+        });
+    }
+});

@@ -19,14 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', handleLogout);
     }
 
-    // તપાસો કે યુઝર ડેશબોર્ડ પેજ પર છે કે નહીં
     const onDashboardPage = window.location.pathname.includes('dashboard.html');
     if (onDashboardPage) {
-        // જો યુઝર લોગિન થયેલો ન હોય તો તેને લોગિન પેજ પર પાછો મોકલો
         if (sessionStorage.getItem('isAdminLoggedIn') !== 'true') {
             window.location.href = '/admin/login.html';
         } else {
-            // જો લોગિન થયેલો હોય તો પ્રોડક્ટ્સ અને ઓર્ડર્સ બતાવો
             fetchAndDisplayProducts();
             fetchAndDisplayOrders();
         }
@@ -89,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             addEditEventListeners(products);
-            addDeleteEventListeners();
+            addProductDeleteListeners();
         } catch (error) {
             console.error("Error fetching products for admin:", error);
             adminProductContainer.innerHTML = "<p>પ્રોડક્ટ્સ લોડ કરવામાં સમસ્યા આવી.</p>";
@@ -154,8 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function addDeleteEventListeners() {
-        const deleteButtons = document.querySelectorAll('.delete-button');
+    function addProductDeleteListeners() {
+        const deleteButtons = document.querySelectorAll('.admin-products-list .delete-button');
         deleteButtons.forEach(button => {
             button.addEventListener('click', async (e) => {
                 const productId = e.target.getAttribute('data-id');
@@ -205,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 orderCard.innerHTML = `
                     <div class="order-header">
                         <h4>ઓર્ડર ID: #${order.orderId}</h4>
-                        <span>${order.timestamp}</span>
+                        <span>${new Date(order.timestamp).toLocaleString('gu-IN')}</span>
                     </div>
                     <div class="order-body">
                         <p><strong>ગ્રાહક:</strong> ${order.customer.name}</p>
@@ -216,13 +213,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="order-footer">
                         <strong>કુલ રકમ: ₹${order.total}</strong>
+                        <button class="delete-button order-delete-btn" data-id="${order._id}">ઓર્ડર ડિલીટ કરો</button>
                     </div>
                 `;
                 adminOrdersContainer.appendChild(orderCard);
             });
+            
+            addOrderDeleteEventListeners();
         } catch (error) {
             console.error('Error fetching orders:', error);
             adminOrdersContainer.innerHTML = '<p>ઓર્ડર્સ લોડ કરવામાં સમસ્યા આવી.</p>';
         }
+    }
+
+    function addOrderDeleteEventListeners() {
+        const deleteButtons = document.querySelectorAll('.order-delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const orderId = e.target.getAttribute('data-id');
+                if (confirm('શું તમે આ ઓર્ડરને ખરેખર ડિલીટ કરવા માંગો છો? આ પ્રક્રિયા ઉલટાવી શકાશે નહીં.')) {
+                    const response = await fetch(`/api/admin/orders/${orderId}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        fetchAndDisplayOrders();
+                    } else {
+                        alert('ઓર્ડર ડિલીટ કરવામાં નિષ્ફળતા મળી.');
+                    }
+                }
+            });
+        });
     }
 });

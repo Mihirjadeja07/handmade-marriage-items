@@ -1,22 +1,15 @@
 // જરૂરી પેકેજ ઇમ્પોર્ટ કરો
 const express = require('express');
-const cors = require('cors');
+const cors =require('cors');
 const path = require('path');
 const { MongoClient, ObjectId } = require('mongodb');
-require('dotenv').config(); // Environment Variables માટે
+require('dotenv').config();
 
 const app = express();
-// Render પોર્ટ આપશે, નહીંતર લોકલ માટે 3000 નો ઉપયોગ થશે
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3000;
 
 // --- ડેટાબેઝ કનેક્શન ---
-// કનેક્શન સ્ટ્રિંગ હવે Environment Variable માંથી આવશે
 const uri = process.env.MONGODB_URI || "mongodb+srv://girfresh_user:Mihir2911@cluster0.nigjo4h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-if (!uri) {
-    console.error("MONGODB_URI environment variable is not set!");
-    process.exit(1);
-}
-
 const client = new MongoClient(uri);
 let db;
 
@@ -34,15 +27,9 @@ connectDB();
 // Middleware
 app.use(cors()); 
 app.use(express.json()); 
-
-// --- સ્ટેટિક ફાઇલો સર્વ કરવા માટે ---
-// આ Express ને કહે છે કે બધી સ્ટેટિક ફાઇલો (HTML, CSS, JS, Images)
-// મુખ્ય ફોલ્ડરમાંથી આપમેળે સર્વ કરવાની છે.
 app.use(express.static(path.join(__dirname)));
 
-
-// --- HTML પેજને સર્વ કરવા માટેના રૂટ્સ ---
-// આ ખાતરી કરે છે કે સીધા URL પર જવાથી પણ પેજ ખુલે
+// HTML Routes
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/products.html', (req, res) => res.sendFile(path.join(__dirname, 'products.html')));
 app.get('/about.html', (req, res) => res.sendFile(path.join(__dirname, 'about.html')));
@@ -53,11 +40,10 @@ app.get('/order-success.html', (req, res) => res.sendFile(path.join(__dirname, '
 app.get('/admin/login.html', (req, res) => res.sendFile(path.join(__dirname, 'admin/login.html')));
 app.get('/admin/dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'admin/dashboard.html')));
 
-
-// ============ APIs ============
+// --- APIs ---
 const adminCredentials = { email: 'Mihir@girfresh.com', password: 'Mihir@2911' };
 
-// --- Public APIs ---
+// Public APIs
 app.get('/api/products', async (req, res) => {
     try {
         if (!db) { return res.status(503).json({ message: "ડેટાબેઝ હજુ કનેક્ટ થઈ રહ્યું છે." }); }
@@ -71,19 +57,23 @@ app.get('/api/products', async (req, res) => {
 app.post('/api/orders', async (req, res) => {
     try {
         const orderDetails = req.body;
-        const newOrder = { ...orderDetails, timestamp: new Date() };
-        await db.collection('orders').insertOne(newOrder);
-        res.status(201).json({ success: true, message: 'ઓર્ડર સફળતાપૂર્વક લેવાઈ ગયો છે!' });
+        const newOrder = {
+            orderId: `GF-${Date.now()}`, 
+            ...orderDetails,
+            timestamp: new Date()
+        };
+        const result = await db.collection('orders').insertOne(newOrder);
+        res.status(201).json({ success: true, message: 'ઓર્ડર સફળતાપૂર્વક લેવાઈ ગયો છે!', orderId: newOrder.orderId });
     } catch (e) {
         res.status(500).json({ success: false, message: "ઓર્ડર સેવ કરવામાં નિષ્ફળતા મળી." });
     }
 });
 
-// --- Admin APIs ---
+// Admin APIs
 app.post('/api/admin/login', (req, res) => {
     const { email, password } = req.body;
     if (email === adminCredentials.email && password === adminCredentials.password) {
-        res.json({ success: true, message: 'Login successful' });
+        res.json({ success: true });
     } else {
         res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
@@ -144,7 +134,24 @@ app.put('/api/products/:id', async (req, res) => {
     }
 });
 
-// સર્વરને ચાલુ કરો
+app.delete('/api/admin/orders/:id', async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        if (!ObjectId.isValid(orderId)) {
+            return res.status(400).json({ success: false, message: 'અમાન્ય ઓર્ડર ID.' });
+        }
+        const result = await db.collection('orders').deleteOne({ _id: new ObjectId(orderId) });
+        if (result.deletedCount > 0) {
+            res.json({ success: true, message: 'ઓર્ડર સફળતાપૂર્વક ડિલીટ થઈ ગયો છે.' });
+        } else {
+            res.status(404).json({ success: false, message: 'ઓર્ડર મળ્યો નથી.' });
+        }
+    } catch (e) {
+        res.status(500).json({ success: false, message: "ઓર્ડર ડિલીટ કરવામાં નિષ્ફળતા મળી." });
+    }
+});
+
+
 app.listen(port, () => {
     console.log(`Gir Fresh Website is running on port: ${port}`);
 });
