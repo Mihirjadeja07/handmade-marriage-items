@@ -66,29 +66,34 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAndDisplayProducts() {
         if (!adminProductContainer) return;
         
-        const response = await fetch('/api/products');
-        const products = await response.json();
+        try {
+            const response = await fetch('/api/products');
+            const products = await response.json();
 
-        adminProductContainer.innerHTML = '';
-        products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'cart-item';
-            productDiv.innerHTML = `
-                <img src="/${product.image_url}" alt="${product.name}">
-                <div class="cart-item-details">
-                    <h4>${product.name}</h4>
-                    <p>₹${product.price.value} / ${product.price.unit}</p>
-                </div>
-                <div class="admin-buttons">
-                    <button class="edit-button" data-id="${product._id}">એડિટ</button>
-                    <button class="delete-button" data-id="${product._id}">ડિલીટ</button>
-                </div>
-            `;
-            adminProductContainer.appendChild(productDiv);
-        });
-        
-        addEditEventListeners(products);
-        addDeleteEventListeners();
+            adminProductContainer.innerHTML = '';
+            products.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'cart-item';
+                productDiv.innerHTML = `
+                    <img src="/${product.image_url}" alt="${product.name}">
+                    <div class="cart-item-details">
+                        <h4>${product.name}</h4>
+                        <p>₹${product.price.value} / ${product.price.unit}</p>
+                    </div>
+                    <div class="admin-buttons">
+                        <button class="edit-button" data-id="${product._id}">એડિટ</button>
+                        <button class="delete-button" data-id="${product._id}">ડિલીટ</button>
+                    </div>
+                `;
+                adminProductContainer.appendChild(productDiv);
+            });
+            
+            addEditEventListeners(products);
+            addDeleteEventListeners();
+        } catch (error) {
+            console.error("Error fetching products for admin:", error);
+            adminProductContainer.innerHTML = "<p>પ્રોડક્ટ્સ લોડ કરવામાં સમસ્યા આવી.</p>";
+        }
     }
     
     if (productForm) {
