@@ -12,7 +12,7 @@
 <body>
 
     <header>
-        <a href="/admin/login.html" class="admin-link">એડમิน લોગિન</a>
+        <a href="/admin/login.html" class="admin-link">એડમિન લોગિન</a>
         <div class="container">
             <h1 class="brand-name">Baisa Craft</h1>
             <nav>
@@ -24,7 +24,6 @@
     </header>
 
     <main>
-        <!-- Page Title Section -->
         <section class="page-title-section">
             <div class="container">
                 <h2>ચુકવણી અને ડિલિવરી</h2>
@@ -43,35 +42,48 @@
                     <li>નીચેના ફોર્મમાં બધી વિગતો ભરો અને સ્ક્રીનશોટ અપલોડ કરો.</li>
                 </ol>
                 <div class="qr-code-container">
-                    <img src="images/my-upi-qr-code.png" alt="UPI QR Code for Payment">
+                    <!-- ==== ફેરફાર અહીં કર્યો છે ==== -->
+                    <img src="images/goolepay_qr.png" alt="Google Pay UPI QR Code">
                     <p><strong>કુલ ચુકવણી: <span id="payment-total">₹0</span></strong></p>
                 </div>
             </div>
 
             <!-- ડિલિવરી ફોર્મ -->
-            <form id="checkout-form" class="contact-form">
+            <form id="checkout-form" class="custom-form">
                 <h3>ડિલિવરી અને ચુકવણીની વિગતો</h3>
                 
-                <label for="customer-name">પૂરું નામ:</label>
-                <input type="text" id="customer-name" required>
+                <div class="form-group">
+                    <label for="customer-name">પૂરું નામ:</label>
+                    <input type="text" id="customer-name" required>
+                </div>
                 
-                <label for="customer-address">પૂરું સરનામું:</label>
-                <textarea id="customer-address" rows="3" required></textarea>
+                <div class="form-group">
+                    <label for="customer-address">પૂરું સરનામું:</label>
+                    <textarea id="customer-address" rows="3" required></textarea>
+                </div>
                 
-                <label for="customer-phone">મોબાઇલ નંબર:</label>
-                <input type="tel" id="customer-phone" required>
+                <div class="form-group">
+                    <label for="customer-phone">મોબાઇલ નંબર:</label>
+                    <input type="tel" id="customer-phone" required>
+                </div>
                 
-                <label for="customer-pincode">પિનકોડ: (ફક્ત ગુજરાત)</label>
-                <input type="text" id="customer-pincode" required>
-                <p id="pincode-error" class="error-message"></p>
+                <div class="form-group">
+                    <label for="customer-pincode">પિનકોડ: (ફક્ત ગુજરાત)</label>
+                    <input type="text" id="customer-pincode" required>
+                    <p id="pincode-error" class="error-message"></p>
+                </div>
 
-                <hr style="margin: 30px 0; border: none; border-top: 1px solid #e9d8c0;">
+                <hr>
 
-                <label for="customer-upi-id">UPI ટ્રાન્ઝેક્શન ID (Ref No.):</label>
-                <input type="text" id="customer-upi-id" required>
+                <div class="form-group">
+                    <label for="customer-upi-id">UPI ટ્રાન્ઝેક્શન ID (Ref No.):</label>
+                    <input type="text" id="customer-upi-id" required>
+                </div>
 
-                <label for="payment-screenshot">પેમેન્ટનો સ્ક્રીનશોટ અપલોડ કરો:</label>
-                <input type="file" id="payment-screenshot" accept="image/*" required>
+                <div class="form-group">
+                    <label for="payment-screenshot">પેમેન્ટનો સ્ક્રીનશોટ અપલોડ કરો:</label>
+                    <input type="file" id="payment-screenshot" accept="image/*" required>
+                </div>
                 
                 <button type="submit" class="submit-button">ઓર્ડર પાક્કો કરો</button>
             </form>
