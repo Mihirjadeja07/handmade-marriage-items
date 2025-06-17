@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(cors()); 
 app.use(express.json()); 
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname))); // સ્ટેટિક ફાઇલો (HTML, CSS, Images) સર્વ કરવા માટે
 
 // --- ફાઇલ અપલોડ સેટઅપ ---
 const storage = multer.diskStorage({
@@ -22,13 +22,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // --- ડેટાબેઝ કનેક્શન ---
-// =========================================================================
-//                  ખૂબ જ મહત્વપૂર્ણ ફેરફાર અહીં છે
-// =========================================================================
-// અહીં તમારી સાચી MongoDB Atlas ની કનેક્શન સ્ટ્રિંગ મૂકવામાં આવી છે.
 const uri = process.env.MONGODB_URI || "mongodb+srv://girfresh_user:Mihir2911@cluster0.nigjo4h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-// =========================================================================
-
 const client = new MongoClient(uri);
 let db;
 
@@ -54,17 +48,17 @@ app.get('/order-success.html', (req, res) => res.sendFile(path.join(__dirname, '
 app.get('/admin/login.html', (req, res) => res.sendFile(path.join(__dirname, 'admin/login.html')));
 app.get('/admin/dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'admin/dashboard.html')));
 
-
 // --- APIs ---
 const adminCredentials = { email: 'baisa@admin.com', password: 'baisa@2025' };
 
 // Public APIs
 app.get('/api/products', async (req, res) => {
     try {
-        if (!db) { return res.status(503).json({ message: "ડેટાબેઝ કનેક્ટ થઈ રહ્યું છે." }); }
+        if (!db) { return res.status(503).json({ message: "ડેટાબેઝ હજુ કનેક્ટ થઈ રહ્યું છે." }); }
         const products = await db.collection('products').find().toArray();
         res.json(products);
     } catch (e) {
+        console.error("Error fetching products:", e);
         res.status(500).json({ success: false, message: "ડેટાબેઝમાંથી પ્રોડક્ટ્સ લાવી શકાયું નથી." });
     }
 });
@@ -76,6 +70,10 @@ app.post('/api/orders', upload.single('paymentScreenshot'), async (req, res) => 
         const customerDetails = JSON.parse(req.body.customer);
         const cartItems = JSON.parse(req.body.items);
         const total = req.body.total;
+        
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: "પેમેન્ટનો સ્ક્રીનશોટ જરૂરી છે." });
+        }
         
         const newOrder = {
             orderId: `BC-${Date.now()}`,
@@ -120,16 +118,11 @@ app.get('/api/admin/orders', async (req, res) => {
 
 app.post('/api/products', async (req, res) => {
     try {
-        console.log("નવી પ્રોડક્ટ માટેનો ડેટા મળ્યો:", req.body);
-
+        if (!db) { return res.status(503).json({ message: "ડેટાબેઝ કનેક્ટ નથી." }); }
         const { name, price, unit, image_url } = req.body;
 
         if (!name || !price || !unit || !image_url) {
-            console.error("ભૂલ: બધી વિગતો જરૂરી છે.");
             return res.status(400).json({ success: false, message: 'કૃપા કરીને બધી વિગતો ભરો.' });
-        }
-        if (!db) { 
-            return res.status(503).json({ message: "ડેટાબેઝ કનેક્ટ નથી." }); 
         }
 
         const newProduct = { 
@@ -145,17 +138,10 @@ app.post('/api/products', async (req, res) => {
     }
 });
 
-app.delete('/api/products/:id', async (req, res) => {
-    // ... આ કોડ પહેલા જેવો જ છે ...
-});
-
-app.put('/api/products/:id', async (req, res) => {
-    // ... આ કોડ પહેલા જેવો જ છે ...
-});
-
-app.delete('/api/admin/orders/:id', async (req, res) => {
-    // ... આ કોડ પહેલા જેવો જ છે ...
-});
+// બાકીના Admin APIs
+app.delete('/api/products/:id', async (req, res) => { /* ... પહેલા જેવો જ કોડ ... */ });
+app.put('/api/products/:id', async (req, res) => { /* ... પહેલા જેવો જ કોડ ... */ });
+app.delete('/api/admin/orders/:id', async (req, res) => { /* ... પહેલા જેવો જ કોડ ... */ });
 
 
 // સર્વરને ચાલુ કરો
