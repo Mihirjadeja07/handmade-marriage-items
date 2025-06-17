@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartCounter = document.getElementById('cart-counter');
 
     // કાર્ટની માહિતી બ્રાઉઝરના લોકલ સ્ટોરેજમાંથી મેળવો
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = JSON.parse(localStorage.getItem('baisaCraftCart')) || [];
     
     // કાર્ટ કાઉન્ટરને અપડેટ કરતું ફંક્શન
     const updateCartCounter = () => {
@@ -17,9 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/api/products') // એબ્સોલ્યુટ પાથનો ઉપયોગ
             .then(response => response.json())
             .then(products => {
-                // જો કોઈ પ્રોડક્ટ ન હોય તો મેસેજ બતાવો
-                if(products.length === 0){
-                    productContainer.innerHTML = '<p>હાલમાં કોઈ પ્રોડક્ટ ઉપલબ્ધ નથી.</p>';
+                // જો ડેટાબેઝમાં કોઈ પ્રોડક્ટ ન હોય તો ડેમો પ્રોડક્ટ્સ બતાવો
+                if(products.length === 0 && window.location.pathname === '/'){
+                    productContainer.innerHTML = `
+                        <div class="product-card">
+                            <img src="images/placeholder_chundadi.jpg" alt="રજવાડી ચુંદડી">
+                            <h3>રજવાડી ચુંદડી</h3>
+                            <p class="price">₹1500 / નંગ</p>
+                            <button class="order-button">કાર્ટમાં ઉમેરો</button>
+                        </div>
+                        <div class="product-card">
+                            <img src="images/placeholder_khambha.jpg" alt="લગ્નના ખમ્ભા">
+                            <h3>લગ્નના ખમ્ભા</h3>
+                            <p class="price">₹2100 / જોડી</p>
+                            <button class="order-button">કાર્ટમાં ઉમેરો</button>
+                        </div>
+                        <div class="product-card">
+                            <img src="images/placeholder_sirakh.jpg" alt="હાથબનાવટ સિરખ">
+                            <h3>હાથબનાવટ સિરખ</h3>
+                            <p class="price">₹1100 / નંગ</p>
+                            <button class="order-button">કાર્ટમાં ઉમેરો</button>
+                        </div>
+                    `;
+                    alert("ડેટાબેઝ ખાલી છે. એડમિન પેનલમાંથી પ્રોડક્ટ્સ ઉમેરો.");
                     return;
                 }
 
@@ -56,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (productToAdd) {
                     cart.push(productToAdd);
-                    localStorage.setItem('cart', JSON.stringify(cart));
+                    localStorage.setItem('baisaCraftCart', JSON.stringify(cart)); // નવા પ્રોજેક્ટ માટે અલગ કાર્ટ
                     updateCartCounter();
-                    alert(`${productToAdd.name} તમારા કાર્ટમાં ઉમેરાઈ ગયું છે!`);
+                    alert(`'${productToAdd.name}' તમારા કાર્ટમાં ઉમેરાઈ ગયું છે!`);
                 }
             });
         });

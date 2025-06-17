@@ -208,12 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p><strong>ગ્રાહક:</strong> ${order.customer.name}</p>
                         <p><strong>સરનામું:</strong> ${order.customer.address}, ${order.customer.pincode}</p>
                         <p><strong>ફોન:</strong> ${order.customer.phone}</p>
+                        <p><strong>UPI ID:</strong> ${order.payment.upiId}</p>
                         <p><strong>ઓર્ડરની વસ્તુઓ:</strong></p>
                         <ul>${orderItemsHTML}</ul>
                     </div>
                     <div class="order-footer">
                         <strong>કુલ રકમ: ₹${order.total}</strong>
-                        <button class="delete-button order-delete-btn" data-id="${order._id}">ઓર્ડર ડિલીટ કરો</button>
+                        <div class="admin-buttons">
+                           <a href="/${order.payment.screenshotPath}" target="_blank" class="edit-button">સ્ક્રીનશોટ જુઓ</a>
+                           <button class="delete-button order-delete-btn" data-id="${order._id}">ઓર્ડર ડિલીટ કરો</button>
+                        </div>
                     </div>
                 `;
                 adminOrdersContainer.appendChild(orderCard);

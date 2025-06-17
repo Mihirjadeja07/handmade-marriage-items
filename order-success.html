@@ -3,41 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ઓર્ડર સફળ - Gir Fresh</title>
+    <title>ઓર્ડર સફળ - Baisa Craft</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;700&family=Teko:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Laila:wght@500;700&family=Noto+Sans+Gujarati:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <header>
-         <a href="/admin/login.html" class="admin-link">એડમિન લોગિન</a>
+        <a href="/admin/login.html" class="admin-link">એડમિન લોગિન</a>
         <div class="container">
-            <h1 class="brand-name">Gir Fresh</h1>
+            <h1 class="brand-name">Baisa Craft</h1>
+            <nav>
+                <a href="/">હોમ</a>
+            </nav>
         </div>
     </header>
 
     <main>
+        <!-- Page Title Section -->
         <section class="page-title-section">
             <div class="container">
                 <h2>આભાર!</h2>
                 <p>તમારો ઓર્ડર સફળતાપૂર્વક લેવાઈ ગયો છે.</p>
-                <p>તમારો ઓર્ડર નંબર છે: <strong id="order-id-display"></strong></p>
-                <p>અમે જલ્દી જ તમારો સંપર્ક કરીશું.</p>
-                <a href="/" class="submit-button" style="text-decoration:none; display:inline-block; margin-top: 20px;">હોમ પેજ પર પાછા જાઓ</a>
+                <p style="font-size: 1.2rem;">તમારો ઓર્ડર નંબર છે: <strong id="order-id-display">#BC-XXXXX</strong></p>
+                <p>અમે જલ્દી જ તમારી ચુકવણીની ચકાસણી કરીને તમારો સંપર્ક કરીશું.</p>
+                <a href="/" class="submit-button" style="text-decoration:none; display:inline-block; margin-top: 20px; width: auto;">હોમ પેજ પર પાછા જાઓ</a>
             </div>
         </section>
     </main>
-
+    
     <footer>
-        <p>&copy; 2025 Gir Fresh. સર્વહક સ્વાધીન.</p>
+        <p>&copy; 2025 Baisa Craft. સર્વહક સ્વાધીન.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const orderIdDisplay = document.getElementById('order-id-display');
+            // sessionStorage માંથી ઓર્ડર ID મેળવો
             const lastOrderId = sessionStorage.getItem('lastOrderId');
+            
             if (orderIdDisplay && lastOrderId) {
                 orderIdDisplay.textContent = `#${lastOrderId}`;
-                sessionStorage.removeItem('lastOrderId'); // ઓર્ડર ID બતાવ્યા પછી તેને કાઢી નાખો
+                // ઓર્ડર ID બતાવ્યા પછી તેને sessionStorage માંથી કાઢી નાખો જેથી તે ફરીથી ન દેખાય
+                sessionStorage.removeItem('lastOrderId');
             }
         });
     </script>

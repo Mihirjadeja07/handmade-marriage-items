@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>એડમિન ડેશબોર્ડ - Gir Fresh</title>
+    <title>એડમિન ડેશબોર્ડ - Baisa Craft</title>
     <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Laila:wght@500;700&family=Noto+Sans+Gujarati:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <header>
         <div class="container">
-            <h1 class="brand-name">Gir Fresh - એડમિન પેનલ</h1>
+            <h1 class="brand-name">Baisa Craft - એડમિન પેનલ</h1>
             <nav>
-                <button id="logout-button" class="submit-button" style="background-color: var(--earthy-brown); width: auto;">લોગઆઉટ</button>
+                <button id="logout-button" class="submit-button" style="background-color: var(--button-hover); width: auto;">લોગઆઉટ</button>
             </nav>
         </div>
     </header>
 
     <main class="container" style="padding-top:40px;">
         
+        <!-- પ્રોડક્ટ ઉમેરવા/એડિટ કરવા માટેનું ફોર્મ -->
         <section class="admin-form-section">
             <h2 id="form-title">નવી પ્રોડક્ટ ઉમેરો</h2>
             <form id="product-form" class="contact-form">
                 <input type="hidden" id="product-id">
+
                 <label for="product-name">પ્રોડક્ટનું નામ:</label>
                 <input type="text" id="product-name" required>
 
                 <label for="product-price">કિંમત (ફક્ત આંકડો):</label>
                 <input type="number" id="product-price" required>
                 
-                <label for="product-unit">એકમ (દા.ત., કિલો, 500 ગ્રામ):</label>
+                <label for="product-unit">એકમ (દા.ત., નંગ, જોડી):</label>
                 <input type="text" id="product-unit" required>
 
-                <label for="product-image">ઇમેજનો પાથ (દા.ત., images/new.jpg):</label>
+                <label for="product-image">ઇમેજનો પાથ (દા.ત., images/chundadi.jpg):</label>
                 <input type="text" id="product-image" required>
                 
                 <button type="submit" id="form-submit-button" class="submit-button">પ્રોડક્ટ ઉમેરો</button>
@@ -39,15 +45,19 @@
             </form>
         </section>
 
-        <hr style="margin: 60px 0;">
+        <hr style="margin: 60px 0; border-color: #e9d8c0;">
 
+        <!-- હાલની પ્રોડક્ટ્સની યાદી -->
         <section class="admin-products-list">
             <h2>હાલની પ્રોડક્ટ્સ</h2>
-            <div id="admin-product-container"></div>
+            <div id="admin-product-container">
+                <!-- JavaScript અહીં પ્રોડક્ટ્સની યાદી બનાવશે -->
+            </div>
         </section>
         
-        <hr style="margin: 60px 0;">
+        <hr style="margin: 60px 0; border-color: #e9d8c0;">
 
+        <!-- મળેલા ઓર્ડર્સની યાદી -->
         <section class="admin-orders-list">
             <h2>મળેલા ઓર્ડર્સ</h2>
             <div id="admin-orders-container">

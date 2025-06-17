@@ -1,32 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
     const checkoutForm = document.getElementById('checkout-form');
     const pincodeError = document.getElementById('pincode-error');
+    const paymentTotalEl = document.getElementById('payment-total');
 
-    // જુનાગઢ જિલ્લાના માન્ય પિનકોડની યાદી
-    const junagadhPincodes = [
-        "362001", "362002", "362011", "362015", "362020", "362030", "362037",
-        "362110", "362120", "362130", "362135", "362140", "362150",
-        "362220", "362222", "362225", "362229", "362240", "362245", "362250", 
-        "362255", "362260", "362263", "362268", "362310", "362610", "362620", 
-        "362625", "362630", "362640", "362715", "362720", "362725", 
-        "365440", "362560", "362565", "362510", "360490"
-    ];
+    // કાર્ટમાંથી કુલ રકમની ગણતરી કરો
+    const cart = JSON.parse(localStorage.getItem('baisaCraftCart')) || [];
+    const total = cart.reduce((sum, item) => sum + (item.price.value || 0), 0);
+    if(paymentTotalEl) paymentTotalEl.textContent = `₹${total}`;
 
     if(checkoutForm) {
         checkoutForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // --- ગુજરાતનો પિનકોડ તપાસો (સરળ પદ્ધતિ) ---
             const customerPincode = document.getElementById('customer-pincode').value;
+            // ગુજરાતના પિનકોડ 36xxxx થી 39xxxx સુધીના હોય છે.
+            if(!/^[3][6-9]\d{4}$/.test(customerPincode)){
+                 pincodeError.textContent = 'કૃપા કરીને ગુજરાતનો સાચો પિનકોડ નાખો.';
+                 return;
+            }
+            pincodeError.textContent = ''; // એરર મેસેજ દૂર કરો
 
-            // પિનકોડ તપાસો
-            if (!junagadhPincodes.includes(customerPincode)) {
-                pincodeError.textContent = 'માફ કરશો, આ પિનકોડ પર ડિલિવરી ઉપલબ્ધ નથી.';
+            const screenshotFile = document.getElementById('payment-screenshot').files[0];
+            if (!screenshotFile) {
+                alert("કૃપા કરીને પેમેન્ટનો સ્ક્રીનશોટ અપલોડ કરો.");
                 return;
             }
+
+            // FormData નો ઉપયોગ ફાઇલ અને ટેક્સ્ટ બંને મોકલવા માટે થાય છે
+            const formData = new FormData();
             
-            pincodeError.textContent = '';
-            
-            // ગ્રાહકની વિગતો મેળવો
             const customerDetails = {
                 name: document.getElementById('customer-name').value,
                 address: document.getElementById('customer-address').value,
@@ -34,33 +37,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 pincode: customerPincode
             };
 
-            // કાર્ટમાંથી વસ્તુઓ અને ટોટલ મેળવો
-            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cartItems.length === 0) {
-                alert("તમારું કાર્ટ ખાલી છે!");
-                return;
-            }
-            
-            const total = cartItems.reduce((sum, item) => sum + item.price.value, 0);
+            // FormData માં બધી માહિતી ઉમેરો
+            formData.append('customer', JSON.stringify(customerDetails));
+            formData.append('items', JSON.stringify(cart));
+            formData.append('total', total);
+            formData.append('upiId', document.getElementById('customer-upi-id').value);
+            formData.append('paymentScreenshot', screenshotFile);
 
-            // ઓર્ડરનો ડેટા તૈયાર કરો
-            const orderData = { customer: customerDetails, items: cartItems, total: total };
-
-            // ઓર્ડરને સર્વર પર મોકલો
             try {
+                // નોંધ: FormData મોકલતી વખતે headers માં 'Content-Type' નથી લખવાનું,
+                // બ્રાઉઝર તે આપમેળે સેટ કરી લે છે.
                 const response = await fetch('/api/orders', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
+                    body: formData 
                 });
 
                 if (response.ok) {
                     const result = await response.json();
-                    localStorage.removeItem('cart'); // કાર્ટ ખાલી કરો
+                    localStorage.removeItem('baisaCraftCart'); // કાર્ટ ખાલી કરો
                     sessionStorage.setItem('lastOrderId', result.orderId); // ઓર્ડર ID સેવ કરો
                     window.location.href = '/order-success.html'; // સફળતા પેજ પર મોકલો
                 } else {
-                    alert('ઓર્ડર કરવામાં સમસ્યા આવી. કૃપા કરીને ફરી પ્રયત્ન કરો.');
+                    const errorResult = await response.json();
+                    alert(`ઓર્ડર કરવામાં સમસ્યા આવી: ${errorResult.message}`);
                 }
             } catch (error) {
                 console.error('Order submission error:', error);

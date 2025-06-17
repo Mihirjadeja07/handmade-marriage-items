@@ -4,22 +4,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalPriceEl = document.getElementById('total-price');
     const checkoutButton = document.getElementById('checkout-button');
     
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // "baisaCraftCart" માંથી કાર્ટની માહિતી મેળવો
+    let cart = JSON.parse(localStorage.getItem('baisaCraftCart')) || [];
 
+    // કાર્ટ કાઉન્ટરને અપડેટ કરતું ફંક્શન
     const updateCartCounter = () => {
         if (cartCounter) cartCounter.textContent = cart.length;
     };
 
+    // કુલ કિંમતની ગણતરી કરતું ફંક્શન
     const calculateTotal = () => {
-        return cart.reduce((sum, item) => sum + item.price.value, 0);
+        let total = 0;
+        cart.forEach(item => {
+            // ખાતરી કરો કે કિંમત એક નંબર છે
+            if (item.price && typeof item.price.value === 'number') {
+                total += item.price.value;
+            }
+        });
+        return total;
     };
     
+    // કાર્ટમાં રહેલી વસ્તુઓને પેજ પર બતાવતું ફંક્શન
     const displayCartItems = () => {
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = '<p>તમારું કાર્ટ હાલ ખાલી છે.</p>';
-            if(checkoutButton) checkoutButton.style.display = 'none';
+            if(checkoutButton) checkoutButton.style.display = 'none'; // જો કાર્ટ ખાલી હોય તો બટન છુપાવો
         } else {
-            cartItemsContainer.innerHTML = ''; 
+            cartItemsContainer.innerHTML = ''; // જૂની વસ્તુઓ દૂર કરો
             cart.forEach((item, index) => {
                 const cartItemHTML = `
                     <div class="cart-item">
@@ -36,28 +47,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if(checkoutButton) checkoutButton.style.display = 'block';
         }
         
+        // ટોટલ અને કાઉન્ટર અપડેટ કરો
         if(totalPriceEl) totalPriceEl.textContent = `₹${calculateTotal()}`;
         updateCartCounter();
         addDeleteListeners();
     };
 
+    // કાર્ટમાંથી વસ્તુ કાઢી નાખવા માટેનું ફંક્શન
     const addDeleteListeners = () => {
         const deleteButtons = document.querySelectorAll('.delete-button');
         deleteButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 const indexToRemove = parseInt(e.target.getAttribute('data-index'));
-                cart.splice(indexToRemove, 1);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                displayCartItems();
+                cart.splice(indexToRemove, 1); // એરેમાંથી વસ્તુ દૂર કરો
+                localStorage.setItem('baisaCraftCart', JSON.stringify(cart)); // લોકલ સ્ટોરેજ અપડેટ કરો
+                displayCartItems(); // કાર્ટ ફરીથી બતાવો
             });
         });
     };
     
+    // ચેકઆઉટ બટન પર ક્લિક કરવાથી checkout.html પર લઈ જશે
     if(checkoutButton) {
         checkoutButton.addEventListener('click', () => {
             window.location.href = '/checkout.html';
         });
     }
 
+    // પેજ લોડ થતાં જ બધી વસ્તુઓ બતાવો
     displayCartItems();
 });
