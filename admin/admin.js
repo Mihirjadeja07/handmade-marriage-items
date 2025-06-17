@@ -19,11 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', handleLogout);
     }
 
+    // તપાસો કે યુઝર ડેશબોર્ડ પેજ પર છે કે નહીં
     const onDashboardPage = window.location.pathname.includes('dashboard.html');
     if (onDashboardPage) {
+        // જો યુઝર લોગિન થયેલો ન હોય તો તેને લોગિન પેજ પર પાછો મોકલો
         if (sessionStorage.getItem('isAdminLoggedIn') !== 'true') {
             window.location.href = '/admin/login.html';
         } else {
+            // જો લોગિન થયેલો હોય તો પ્રોડક્ટ્સ અને ઓર્ડર્સ બતાવો
             fetchAndDisplayProducts();
             fetchAndDisplayOrders();
         }
