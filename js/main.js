@@ -17,32 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/api/products') // એબ્સોલ્યુટ પાથનો ઉપયોગ
             .then(response => response.json())
             .then(products => {
-                // જો ડેટાબેઝમાં કોઈ પ્રોડક્ટ ન હોય તો ડેમો પ્રોડક્ટ્સ બતાવો
-                if(products.length === 0 && window.location.pathname === '/'){
-                    productContainer.innerHTML = `
-                        <div class="product-card">
-                            <img src="images/placeholder_chundadi.jpg" alt="રજવાડી ચુંદડી">
-                            <h3>રજવાડી ચુંદડી</h3>
-                            <p class="price">₹1500 / નંગ</p>
-                            <button class="order-button">કાર્ટમાં ઉમેરો</button>
-                        </div>
-                        <div class="product-card">
-                            <img src="images/placeholder_khambha.jpg" alt="લગ્નના ખમ્ભા">
-                            <h3>લગ્નના ખમ્ભા</h3>
-                            <p class="price">₹2100 / જોડી</p>
-                            <button class="order-button">કાર્ટમાં ઉમેરો</button>
-                        </div>
-                        <div class="product-card">
-                            <img src="images/placeholder_sirakh.jpg" alt="હાથબનાવટ સિરખ">
-                            <h3>હાથબનાવટ સિરખ</h3>
-                            <p class="price">₹1100 / નંગ</p>
-                            <button class="order-button">કાર્ટમાં ઉમેરો</button>
-                        </div>
-                    `;
-                    alert("ડેટાબેઝ ખાલી છે. એડમિન પેનલમાંથી પ્રોડક્ટ્સ ઉમેરો.");
+                // જો કોઈ પ્રોડક્ટ ન હોય તો મેસેજ બતાવો
+                if(!products || products.length === 0){
+                    productContainer.innerHTML = '<p style="text-align:center; width:100%;">હાલમાં કોઈ પ્રોડક્ટ ઉપલબ્ધ નથી. કૃપા કરીને એડમિન પેનલમાંથી પ્રોડક્ટ્સ ઉમેરો.</p>';
                     return;
                 }
-
+                
                 productContainer.innerHTML = ''; // જૂનો ડેટા સાફ કરો
                 products.forEach(product => {
                     // દરેક પ્રોડક્ટ માટે HTML કાર્ડ બનાવો
