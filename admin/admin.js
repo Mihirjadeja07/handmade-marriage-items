@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(productData)
             });
 
+            // સર્વરમાંથી મળેલા જવાબને વાંચો
             const result = await response.json();
             
             if (response.ok) {
@@ -138,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Form submission error:", error);
             alert('કંઈક ભૂલ થઈ. કૃપા કરીને કન્સોલ તપાસો.');
         } finally {
-            // બટનને ફરીથી કાર્યરત કરો
+            // ભૂલ આવે કે સફળતા મળે, બટનને હંમેશા ફરીથી કાર્યરત કરો
             submitButton.disabled = false;
             submitButton.textContent = productId ? 'અપડેટ કરો' : 'પ્રોડક્ટ ઉમેરો';
         }
