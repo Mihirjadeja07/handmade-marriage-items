@@ -64,7 +64,7 @@ header .container {
 }
 
 .brand-name {
-    font-family: 'Laila', serif;
+    font-family: 'Laila', serif; /* રજવાડી ફોન્ટ */
     font-size: 2.8rem;
     color: var(--royal-maroon);
     margin: 0;
@@ -292,28 +292,34 @@ nav a:hover, .nav-active {
     border-radius: 8px;
 }
 
-/* Form Styles */
-.custom-form {
-    background: #fffaf0;
-    padding: 30px;
+/* ======================================= */
+/* ફોર્મ માટે નવી સુધારેલી સ્ટાઇલ      */
+/* ======================================= */
+.custom-form-container {
+    background: white;
+    padding: 40px;
     border-radius: 8px;
     border: 1px solid #e9d8c0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.custom-form-container h3 {
+    text-align: center;
+    font-family: 'Laila', serif;
+    color: var(--royal-maroon);
+    margin-top: 0;
+    font-size: 2rem;
 }
 .form-group {
     margin-bottom: 20px;
 }
-.custom-form label {
+.form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
     color: var(--dark-text);
 }
-.custom-form input[type="text"],
-.custom-form input[type="email"],
-.custom-form input[type="tel"],
-.custom-form input[type="number"],
-.custom-form input[type="file"],
-.custom-form textarea {
+.form-group input,
+.form-group textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
@@ -321,17 +327,26 @@ nav a:hover, .nav-active {
     font-family: 'Noto Sans Gujarati', sans-serif;
     font-size: 1rem;
     box-sizing: border-box; 
+    transition: border-color 0.3s;
 }
-.custom-form hr {
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--gold-accent);
+}
+
+.custom-form-container hr {
     margin: 30px 0;
     border: none;
     border-top: 1px solid #e9d8c0;
 }
+
 .error-message {
     color: var(--error-red);
     font-size: 0.9rem;
     margin-top: 5px;
 }
+
 
 /* Payment Instructions */
 .payment-instructions {

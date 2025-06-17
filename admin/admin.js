@@ -214,10 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="order-footer">
                         <strong>કુલ રકમ: ₹${order.total}</strong>
-                        <div class="admin-buttons">
-                           <a href="/${order.payment.screenshotPath}" target="_blank" class="edit-button">સ્ક્રીનશોટ જુઓ</a>
-                           <button class="delete-button order-delete-btn" data-id="${order._id}">ઓર્ડર ડિલીટ કરો</button>
-                        </div>
+                        <button class="delete-button order-delete-btn" data-id="${order._id}">ઓર્ડર ડિલીટ કરો</button>
                     </div>
                 `;
                 adminOrdersContainer.appendChild(orderCard);
