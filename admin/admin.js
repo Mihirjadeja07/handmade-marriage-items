@@ -19,14 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', handleLogout);
     }
 
-    // તપાસો કે યુઝર ડેશબોર્ડ પેજ પર છે કે નહીં
     const onDashboardPage = window.location.pathname.includes('dashboard.html');
     if (onDashboardPage) {
-        // જો યુઝર લોગિન થયેલો ન હોય તો તેને લોગિન પેજ પર પાછો મોકલો
         if (sessionStorage.getItem('isAdminLoggedIn') !== 'true') {
             window.location.href = '/admin/login.html';
         } else {
-            // જો લોગિન થયેલો હોય તો પ્રોડક્ટ્સ અને ઓર્ડર્સ બતાવો
             fetchAndDisplayProducts();
             fetchAndDisplayOrders();
         }
@@ -106,6 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function handleFormSubmit(e) {
         e.preventDefault();
+        submitButton.disabled = true;
+        submitButton.textContent = 'પ્રોસેસિંગ...';
+
         const productId = productIdField.value;
         const productData = {
             name: document.getElementById('product-name').value,
@@ -117,18 +117,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const method = productId ? 'PUT' : 'POST';
         const url = productId ? `/api/products/${productId}` : '/api/products';
         
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(productData)
-        });
-        
-        if (response.ok) {
-            alert(productId ? 'પ્રોડક્ટ સફળતાપૂર્વક અપડેટ થઈ ગઈ છે!' : 'પ્રોડક્ટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!');
-            resetForm();
-            fetchAndDisplayProducts();
-        } else {
-            alert('કંઈક ભૂલ થઈ. કૃપા કરીને ફરી પ્રયત્ન કરો.');
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
+            });
+
+            const result = await response.json();
+            
+            if (response.ok) {
+                alert(productId ? 'પ્રોડક્ટ સફળતાપૂર્વક અપડેટ થઈ ગઈ છે!' : 'પ્રોડક્ટ સફળતાપૂર્વક ઉમેરાઈ ગઈ છે!');
+                resetForm();
+                fetchAndDisplayProducts();
+            } else {
+                // સર્વરમાંથી આવેલો સ્પષ્ટ એરર મેસેજ બતાવો
+                alert(`ભૂલ: ${result.message || 'અજાણી ભૂલ થઈ.'}`);
+            }
+        } catch (error) {
+            console.error("Form submission error:", error);
+            alert('કંઈક ભૂલ થઈ. કૃપા કરીને કન્સોલ તપાસો.');
+        } finally {
+            // બટનને ફરીથી કાર્યરત કરો
+            submitButton.disabled = false;
+            submitButton.textContent = productId ? 'અપડેટ કરો' : 'પ્રોડક્ટ ઉમેરો';
         }
     }
 
